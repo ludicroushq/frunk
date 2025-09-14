@@ -1,39 +1,38 @@
-export interface Config {
+export type Config = {
   quiet?: boolean;
   continue?: boolean;
   prefix?: boolean | string;
   // Future: cache, timeout, retry, etc.
-}
+};
 
-export interface ParsedCommand {
+export type ParsedCommand = {
   patterns: string[];
   config: Config;
   command?: string;
-}
+};
 
-export interface Task {
+export type Task = {
   name: string;
   command: string;
   dependencies: string[];
-}
+};
 
-export interface Script {
+export type Script = {
   name: string;
   command: string;
-}
+};
 
-export interface ExecutionNode {
+export type ExecutionNode = {
   id: string;
   tasks: Task[];
   dependencies: string[];
   sequential: boolean;
-}
+};
 
 export interface RunOptions extends Config {
   cwd?: string;
   env?: Record<string, string>;
 }
-
 
 export interface ParseError extends Error {
   position?: number;

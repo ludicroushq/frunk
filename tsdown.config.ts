@@ -1,18 +1,18 @@
-import { defineConfig } from 'tsdown';
+import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  entry: {
-    cli: './src/cli.ts',
-    index: './src/index.ts',
-  },
-  format: 'esm',
   clean: true,
   dts: true,
-  target: 'node18',
-  platform: 'node',
-  shims: true,
-  external: ['ansis', 'execa', 'micromatch'],
-  esbuildOptions: {
-    packages: 'external',
+  entry: {
+    cli: "./src/cli.ts",
+    index: "./src/index.ts",
   },
+  esbuildOptions: {
+    packages: "external",
+  },
+  external: ["ansis", "execa", "micromatch"],
+  format: "esm",
+  platform: "node",
+  shims: true,
+  target: "node18",
 });

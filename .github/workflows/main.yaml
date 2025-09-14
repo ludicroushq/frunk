@@ -1,0 +1,11 @@
+on:
+  push:
+    branches:
+      - main
+
+concurrency: main
+
+jobs:
+  test:
+    uses: ./.github/workflows/_test.yaml
+    secrets: inherit

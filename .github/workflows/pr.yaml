@@ -1,0 +1,6 @@
+on: pull_request
+
+jobs:
+  test:
+    uses: ./.github/workflows/_test.yaml
+    secrets: inherit

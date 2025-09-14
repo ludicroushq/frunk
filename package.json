@@ -10,12 +10,18 @@
     "f": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsdown",
-    "dev": "tsdown --watch",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm build"
+    "build": "f -- tsdown",
+    "dev": "f -- tsdown --watch",
+    "vitest": "vitest",
+    "test": "f [test:*]",
+    "test:vitest": "vitest run",
+    "test:typecheck": "tsc --noEmit",
+    "test:lint": "ultracite fix",
+    "ci:test": "f [ci:test:*]",
+    "ci:test:typecheck": "tsc --noEmit",
+    "ci:test:lint": "ultracite fix",
+    "ci:test:vitest": "vitest run --coverage",
+    "prepublishOnly": "f [build]"
   },
   "keywords": [
     "npm-scripts",
@@ -34,18 +40,25 @@
     "dist"
   ],
   "devDependencies": {
+    "@biomejs/biome": "2.2.2",
+    "@changesets/cli": "^2.29.7",
     "@types/debug": "^4.1.12",
+    "@types/graphlib": "^2.1.12",
     "@types/micromatch": "^4.0.9",
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "debug": "^4.4.3",
+    "frunk": "^0.0.1",
+    "lefthook": "^1.13.0",
     "tsdown": "^0.2.0",
     "typescript": "^5.3.0",
+    "ultracite": "5.3.3",
     "vitest": "^1.0.0"
   },
   "dependencies": {
     "ansis": "^4.1.0",
     "execa": "^8.0.0",
+    "graphlib": "^2.1.8",
     "micromatch": "^4.0.5"
   }
 }

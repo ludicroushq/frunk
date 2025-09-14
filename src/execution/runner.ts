@@ -1,30 +1,34 @@
-import { parseCommand } from '../core/parser';
-import { PatternMatcher } from '../core/pattern-matcher';
-import { GraphBuilder } from '../core/graph-builder';
-import { Executor } from './executor';
-import { Script, RunOptions } from '../types';
+import { GraphBuilder } from "../core/graph-builder";
+import { parseCommand } from "../core/parser";
+import { PatternMatcher } from "../core/pattern-matcher";
+import type { RunOptions, Script } from "../types";
+import { Executor } from "./executor";
 
 export class Runner {
-  private matcher = new PatternMatcher();
-  private graphBuilder = new GraphBuilder();
+  private readonly matcher = new PatternMatcher();
+  private readonly graphBuilder = new GraphBuilder();
 
-  async run(args: string[], availableScripts: Script[], options: RunOptions = {}): Promise<void> {
+  async run(
+    args: string[],
+    availableScripts: Script[],
+    options: RunOptions = {}
+  ): Promise<void> {
     try {
       // Parse command
       const parsed = parseCommand(args);
-      
+
       // Merge config with options
       const config = { ...parsed.config, ...options };
-      
+
       // Resolve patterns to actual scripts
       const resolvedPatterns = this.matcher.resolvePatterns(
-        parsed.patterns, 
+        parsed.patterns,
         availableScripts
       );
-      
+
       // Validate patterns
       this.matcher.validatePatterns(parsed.patterns, availableScripts);
-      
+
       // Build execution graph
       const graph = this.graphBuilder.buildGraph(
         resolvedPatterns,
@@ -32,16 +36,16 @@ export class Runner {
         config,
         parsed.command
       );
-      
+
       // Validate graph
       this.graphBuilder.validateGraph(graph);
-      
+
       // Execute
       const executor = new Executor(config);
       await executor.execute(graph);
-      
-    } catch (error: any) {
-      console.error('Error:', error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("Error:", message);
       process.exit(1);
     }
   }

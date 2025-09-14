@@ -1,5 +1,5 @@
-import ansis from 'ansis';
-import { Config } from '../types';
+import ansis from "ansis";
+import type { Config } from "../types";
 
 const colors = [
   ansis.cyan,
@@ -13,15 +13,15 @@ const colors = [
 ] as const;
 
 export class Logger {
-  private colorMap = new Map<string, typeof colors[number]>();
+  private readonly colorMap = new Map<string, (typeof colors)[number]>();
   private colorIndex = 0;
   private maxPrefixLength = 0;
-  private config: Config;
+  private readonly config: Config;
 
   constructor(config: Config = {}) {
     this.config = {
-      quiet: false,
       prefix: true, // Default to true
+      quiet: false,
       ...config,
     };
   }
@@ -38,57 +38,66 @@ export class Logger {
   }
 
   log(taskName: string, message: string): void {
-    if (this.config.quiet) return;
-    
-    const lines = message.split('\n');
+    if (this.config.quiet) {
+      return;
+    }
+
+    const lines = message.split("\n");
     for (const line of lines) {
-      if (!line.trim()) continue;
-      
+      if (!line.trim()) {
+        continue;
+      }
+
       const output = this.formatLine(taskName, line);
       console.log(output);
     }
   }
 
   error(taskName: string, message: string): void {
-    const lines = message.split('\n');
+    const lines = message.split("\n");
     for (const line of lines) {
-      if (!line.trim()) continue;
-      
+      if (!line.trim()) {
+        continue;
+      }
+
       const output = this.formatLine(taskName, ansis.red(line));
       console.error(output);
     }
   }
 
   info(message: string): void {
-    if (this.config.quiet) return;
-    console.log(ansis.blue('ℹ') + ' ' + message);
+    if (this.config.quiet) {
+      return;
+    }
+    console.log(`${ansis.blue("ℹ")} ${message}`);
   }
 
   success(message: string): void {
-    if (this.config.quiet) return;
-    console.log(ansis.green('✓') + ' ' + message);
+    if (this.config.quiet) {
+      return;
+    }
+    console.log(`${ansis.green("✓")} ${message}`);
   }
 
   warn(message: string): void {
-    console.warn(ansis.yellow('⚠') + ' ' + message);
+    console.warn(`${ansis.yellow("⚠")} ${message}`);
   }
 
   private formatLine(taskName: string, line: string): string {
     if (this.config.prefix === false) {
       return line;
     }
-    
+
     const color = this.colorMap.get(taskName) ?? ansis.white;
-    
-    if (typeof this.config.prefix === 'string') {
+
+    if (typeof this.config.prefix === "string") {
       // Custom prefix
       return `${color(this.config.prefix)} ${line}`;
-    } else {
-      // Default prefix format - pad to align with pipe separator
-      const prefix = `[${taskName}]`;
-      const paddedPrefix = prefix.padEnd(this.maxPrefixLength + 2); // +2 for brackets
-      return `${color(paddedPrefix)} ${ansis.gray('|')} ${line}`;
     }
+    // Default prefix format - pad to align with pipe separator
+    const prefix = `[${taskName}]`;
+    const paddedPrefix = prefix.padEnd(this.maxPrefixLength + 2); // +2 for brackets
+    return `${color(paddedPrefix)} ${ansis.gray("|")} ${line}`;
   }
 
   /**
@@ -101,10 +110,13 @@ export class Logger {
 }
 
 export class TaskLogger {
-  constructor(
-    private parent: Logger,
-    private taskName: string
-  ) {}
+  private readonly parent: Logger;
+  private readonly taskName: string;
+
+  constructor(parent: Logger, taskName: string) {
+    this.parent = parent;
+    this.taskName = taskName;
+  }
 
   log(message: string): void {
     this.parent.log(this.taskName, message);
