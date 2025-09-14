@@ -16,18 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-          cache: "npm"
+          node-version: lts/*
+          cache: "pnpm"
 
-      - run: npm ci
+      - run: pnpm install
 
       - uses: changesets/action@v1
         id: changesets
         with:
-          publish: npm run release
-          version: npm run version
+          publish: pnpm release
+          version: pnpm version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

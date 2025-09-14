@@ -10,8 +10,8 @@
     "f": "./dist/cli.js"
   },
   "scripts": {
-    "build": "f -- tsdown",
-    "dev": "f -- tsdown --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "vitest": "vitest",
     "test": "f [test:*]",
     "test:vitest": "vitest run",
@@ -21,7 +21,10 @@
     "ci:test:typecheck": "tsc --noEmit",
     "ci:test:lint": "ultracite fix",
     "ci:test:vitest": "vitest run --coverage",
-    "prepublishOnly": "f [build]"
+    "prepublishOnly": "f [build]",
+    "prepare": "lefthook",
+    "release": "f [build] -- changeset publish",
+    "version": "changeset version && pnpm i"
   },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
