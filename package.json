@@ -23,7 +23,7 @@
     "ci:test:vitest": "vitest run --coverage",
     "prepublishOnly": "f [build]"
   },
-  "packageManager": "npm@10.0.0",
+  "packageManager": "pnpm@10.0.0",
   "keywords": [
     "npm-scripts",
     "parallel",
