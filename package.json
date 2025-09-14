@@ -1,0 +1,51 @@
+{
+  "name": "frunk",
+  "version": "0.0.1",
+  "description": "A parallel script runner that makes complex orchestration simple",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "frunk": "./dist/cli.js",
+    "f": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "npm-scripts",
+    "parallel",
+    "runner",
+    "orchestration",
+    "task-runner",
+    "monorepo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/debug": "^4.1.12",
+    "@types/micromatch": "^4.0.9",
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "debug": "^4.4.3",
+    "tsdown": "^0.2.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "ansis": "^4.1.0",
+    "execa": "^8.0.0",
+    "micromatch": "^4.0.5"
+  }
+}
