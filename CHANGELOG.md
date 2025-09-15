@@ -1,5 +1,13 @@
 # frunk
 
+## 0.0.4
+
+### Patch Changes
+
+- c71a675: fix final command
+- Updated dependencies [c71a675]
+  - frunk@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes
