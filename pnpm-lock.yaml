@@ -46,7 +46,7 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
       frunk:
-        specifier: ^0.0.1
+        specifier: 0.0.1
         version: 0.0.1
       lefthook:
         specifier: ^1.13.0
