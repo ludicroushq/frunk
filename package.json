@@ -27,12 +27,16 @@
   },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
-    "npm-scripts",
+    "npm",
+    "node",
+    "typescript",
     "parallel",
     "runner",
-    "orchestration",
     "task-runner",
-    "monorepo"
+    "npm-scripts",
+    "npm-run-all",
+    "concurrently",
+    "wireit"
   ],
   "author": "ludicrous",
   "license": "MIT",
