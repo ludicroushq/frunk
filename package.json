@@ -1,6 +1,6 @@
 {
   "name": "frunk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A parallel script runner that makes complex orchestration simple",
   "type": "module",
   "main": "./dist/index.js",
@@ -59,7 +59,7 @@
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "debug": "^4.4.3",
-    "frunk": "^0.0.1",
+    "frunk": "^0.0.2",
     "lefthook": "^1.13.0",
     "tsdown": "^0.2.0",
     "typescript": "^5.3.0",
