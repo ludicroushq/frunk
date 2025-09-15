@@ -23,7 +23,7 @@
     "prepublishOnly": "f [build]",
     "prepare": "f -- lefthook install",
     "release": "f [build] -- changeset publish",
-    "version": "f -- changeset version && pnpm install --no-frozen-lockfile"
+    "version": "f -- changeset version"
   },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
