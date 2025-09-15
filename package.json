@@ -23,7 +23,7 @@
     "prepublishOnly": "f [build]",
     "prepare": "f -- lefthook install",
     "release": "f [build] -- changeset publish",
-    "version": "f -- changeset version && pnpm install frunk@0.0.2"
+    "version": "f -- changeset version && pnpm install frunk@0.0.4"
   },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
@@ -72,7 +72,7 @@
   "dependencies": {
     "ansis": "^4.1.0",
     "execa": "^8.0.0",
-    "frunk": "0.0.2",
+    "frunk": "0.0.4",
     "graphlib": "^2.1.8",
     "micromatch": "^4.0.5"
   }
