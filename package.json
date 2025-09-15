@@ -68,6 +68,7 @@
   "dependencies": {
     "ansis": "^4.1.0",
     "execa": "^8.0.0",
+    "frunk": "0.0.2",
     "graphlib": "^2.1.8",
     "micromatch": "^4.0.5"
   }

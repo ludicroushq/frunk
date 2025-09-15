@@ -14,6 +14,9 @@ importers:
       execa:
         specifier: ^8.0.0
         version: 8.0.1
+      frunk:
+        specifier: 0.0.2
+        version: 0.0.2
       graphlib:
         specifier: ^2.1.8
         version: 2.1.8
@@ -45,9 +48,6 @@ importers:
       debug:
         specifier: ^4.4.3
         version: 4.4.3
-      frunk:
-        specifier: 0.0.1
-        version: 0.0.1
       lefthook:
         specifier: ^1.13.0
         version: 1.13.0
@@ -1097,8 +1097,8 @@ packages:
     resolution: {integrity: sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw==}
     engines: {node: '>=8'}
 
-  frunk@0.0.1:
-    resolution: {integrity: sha512-uR0N5fc5rooFsVBqHkJqhwEDfpVLSLWA6ceM/4T99ZHvRpZ30shYRDmg0tdV6ILMGPJ62T/b9aPMqCixYlq/xQ==}
+  frunk@0.0.2:
+    resolution: {integrity: sha512-nQNPjVX16P93L/88ChV6/Wmca2W3ezaU/SFanZ5ZiI6q6ojGhfoJOp1faYFUnQkW5pKlrHcdzSC3JuT4EeopFQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -2773,10 +2773,11 @@ snapshots:
       locate-path: 5.0.0
       path-exists: 4.0.0
 
-  frunk@0.0.1:
+  frunk@0.0.2:
     dependencies:
       ansis: 4.1.0
       execa: 8.0.1
+      graphlib: 2.1.8
       micromatch: 4.0.8
 
   fs-extra@7.0.1:
