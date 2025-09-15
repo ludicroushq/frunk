@@ -2,7 +2,7 @@
 
 **⚠️ IMPORTANT: This file should be constantly updated as changes are made to the project. Future agents should read this file first and update it with any new information or changes they make.**
 
-Last Updated: 2025-01-14 (Session 2)
+Last Updated: 2025-09-14 (Session 3)
 
 ## Project Overview
 
@@ -207,6 +207,15 @@ Uses `tsdown` for building - a fast TypeScript bundler.
 **Solution**: Install `@types/debug` and `@types/micromatch`
 
 ## Recent Changes
+
+### 2025-09-14 (Session 3)
+
+1. README overhaul: concise layout with badges (npm version, license)
+2. Installation clarified: recommend dev dependency (`npm i -D frunk`)
+3. Quickstart: uses `frunk` with note that `f` is a short alias; rest of README uses `f`
+4. Moved docs section (syntax: `[]`, `->`, globs, `--`, flags) above the medium-sized example and expanded explanations beyond bullets
+5. Removed downloads/CI/node badges; tagline updated to “supercharging npm scripts”
+6. Simplified medium example to only include `api`, `app` (vite), and `worker` dev scripts plus a shared dependency
 
 ### 2025-01-14 (Session 2)
 
