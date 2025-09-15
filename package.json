@@ -21,7 +21,7 @@
     "ci:test:lint": "f -- ultracite fix",
     "ci:test:vitest": "f -- vitest run --coverage",
     "prepublishOnly": "f [build]",
-    "prepare": "f -- lefthook",
+    "prepare": "f -- lefthook install",
     "release": "f [build] -- changeset publish",
     "version": "f -- changeset version && pnpm i"
   },
