@@ -35,7 +35,7 @@
     "task-runner",
     "monorepo"
   ],
-  "author": "",
+  "author": "ludicrous",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
@@ -43,6 +43,14 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludicroushq/frunk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ludicroushq/frunk/issues"
+  },
+  "homepage": "https://github.com/ludicroushq/frunk#readme",
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
     "@changesets/cli": "^2.29.7",
