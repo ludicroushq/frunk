@@ -23,7 +23,7 @@
     "prepublishOnly": "f [build]",
     "prepare": "f -- lefthook install",
     "release": "f [build] -- changeset publish",
-    "version": "f -- changeset version && pnpm install frunk@0.0.2 --no-frozen-lockfile"
+    "version": "f -- changeset version && pnpm install frunk@0.0.2"
   },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
