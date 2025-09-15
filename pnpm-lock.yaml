@@ -15,8 +15,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.1
       frunk:
-        specifier: 0.0.2
-        version: 0.0.2
+        specifier: 0.0.4
+        version: 0.0.4
       graphlib:
         specifier: ^2.1.8
         version: 2.1.8
@@ -1099,6 +1099,11 @@ packages:
 
   frunk@0.0.2:
     resolution: {integrity: sha512-nQNPjVX16P93L/88ChV6/Wmca2W3ezaU/SFanZ5ZiI6q6ojGhfoJOp1faYFUnQkW5pKlrHcdzSC3JuT4EeopFQ==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
+  frunk@0.0.4:
+    resolution: {integrity: sha512-BFoBB0Nzv5VLwoWILsmaw4WWOyC+Qs7yxXCJC5PZaac3q03jQsSF5HErE3llzz1VFAvJ+rq2XroKorkfPHUuEA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -2777,6 +2782,14 @@ snapshots:
     dependencies:
       ansis: 4.1.0
       execa: 8.0.1
+      graphlib: 2.1.8
+      micromatch: 4.0.8
+
+  frunk@0.0.4:
+    dependencies:
+      ansis: 4.1.0
+      execa: 8.0.1
+      frunk: 0.0.2
       graphlib: 2.1.8
       micromatch: 4.0.8
 
