@@ -28,6 +28,7 @@ export class GraphBuilder {
   /**
    * Build execution graph from resolved patterns
    */
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Core graph construction requires this complexity
   buildGraph(
     patterns: string[],
     availableScripts: Script[],
@@ -144,10 +145,32 @@ export class GraphBuilder {
       }
     };
 
-    // Process all requested patterns
-    for (const pattern of patterns) {
-      const scriptName = pattern.replace("SEQ:", "");
+    // Process all requested patterns (strip any sequential markers for now)
+    const resolvedScriptNames = patterns.map((p) => p.replace("SEQ:", ""));
+    for (const scriptName of resolvedScriptNames) {
       processScript(scriptName);
+    }
+
+    // If we have a direct command after --, add it as a node that depends
+    // on all requested scripts so it runs after dependencies complete.
+    if (command && resolvedScriptNames.length > 0) {
+      const COMMAND_NODE_NAME = "__frunk_command__";
+      const commandTask: TaskNode = {
+        task: {
+          command,
+          dependencies: [],
+          name: "command",
+        },
+      };
+      graph.setNode(COMMAND_NODE_NAME, commandTask);
+
+      for (const depName of resolvedScriptNames) {
+        // Only add edges to scripts that exist; skip unknowns gracefully
+        if (graph.hasNode(depName)) {
+          log(`Adding edge from command to ${depName}`);
+          graph.setEdge(COMMAND_NODE_NAME, depName);
+        }
+      }
     }
 
     log("\n=== Graph structure ===");

@@ -2,7 +2,7 @@
 
 **⚠️ IMPORTANT: This file should be constantly updated as changes are made to the project. Future agents should read this file first and update it with any new information or changes they make.**
 
-Last Updated: 2025-09-14 (Session 3)
+Last Updated: 2025-09-15 (Session 4)
 
 ## Project Overview
 
@@ -207,6 +207,14 @@ Uses `tsdown` for building - a fast TypeScript bundler.
 **Solution**: Install `@types/debug` and `@types/micromatch`
 
 ## Recent Changes
+
+### 2025-09-15 (Session 4)
+
+1. Verified command pass-through with repeated `--` works (e.g., `f -- next serve -- --trace-deprication`).
+2. Added test `src/__tests__/execution/command-forwarding.test.ts` that stubs a local `next` binary and asserts arguments are forwarded unchanged.
+3. Fixed bug: command after `--` not executed when patterns present. GraphBuilder now adds a final "command" node depending on selected scripts.
+4. Added safe script `release:dry` to run `f [build] -- node -e ...` without publishing.
+5. Added tmp harness `tmp/release-check` to validate dependency-then-command flow without network/publish.
 
 ### 2025-09-14 (Session 3)
 
