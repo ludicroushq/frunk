@@ -53,6 +53,11 @@
   "bugs": {
     "url": "https://github.com/ludicroushq/frunk/issues"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "lefthook"
+    ]
+  },
   "homepage": "https://github.com/ludicroushq/frunk#readme",
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
