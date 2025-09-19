@@ -23,6 +23,8 @@ npm i -D frunk
 # yarn add -D frunk
 ```
 
+**NOTE:** Until frunk hits 1.0, breaking changes may be made on minor versions (0.x.0) and the remaining changes will be patch versions (0.0.x)
+
 ## Quickstart
 
 Add a few scripts to `package.json`:
