@@ -25,6 +25,9 @@
     "release": "f [build] -- changeset publish",
     "version": "f -- changeset version && pnpm install frunk@0.0.4"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.0.0",
   "keywords": [
     "npm",
