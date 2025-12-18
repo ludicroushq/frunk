@@ -1,6 +1,6 @@
 {
   "name": "frunk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A parallel script runner that makes complex orchestration simple",
   "type": "module",
   "main": "./dist/index.js",

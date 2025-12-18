@@ -1,5 +1,13 @@
 # frunk
 
+## 0.0.5
+
+### Patch Changes
+
+- f271322: bug fix with dependency graph
+- Updated dependencies [f271322]
+  - frunk@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
