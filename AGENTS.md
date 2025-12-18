@@ -2,7 +2,7 @@
 
 **⚠️ IMPORTANT: This file should be constantly updated as changes are made to the project. Future agents should read this file first and update it with any new information or changes they make.**
 
-Last Updated: 2025-09-15 (Session 4)
+Last Updated: 2025-12-17 (Session 5)
 
 ## Project Overview
 
@@ -59,7 +59,7 @@ f [shared:dep,app:dep] -- vite dev  # Run dependencies then command
 
    - Resolves glob patterns to actual script names
    - Handles exclusions (`!pattern`)
-   - Supports sequential markers (`SEQ:`)
+   - Supports sequential markers (`SEQ:`) and encodes each `->` segment with `SEQ0:task`, `SEQ1:task`, etc. so ordering can be reconstructed later
    - Uses micromatch library for glob matching
 
 3. **Graph Builder** (`src/core/graph-builder.ts`)
@@ -68,6 +68,7 @@ f [shared:dep,app:dep] -- vite dev  # Run dependencies then command
    - **Key feature**: Parses frunk commands within npm scripts
    - Automatically deduplicates shared dependencies
    - Resolves glob patterns in dependencies
+   - Rebuilds sequential groups (from the indexed `SEQ` markers) so every `[a]->[b]` edge becomes dependencies from `b` to each `a`
    - Creates ExecutionNode structures with proper dependency chains
 
 4. **Executor** (`src/execution/executor.ts`)
@@ -207,6 +208,12 @@ Uses `tsdown` for building - a fast TypeScript bundler.
 **Solution**: Install `@types/debug` and `@types/micromatch`
 
 ## Recent Changes
+
+### 2025-12-17 (Session 5)
+
+1. Fixed sequential chains so tasks after `->` depend on every task in the previous group by tagging sequential matches with indexed prefixes (`SEQ0:`, `SEQ1:`) in the pattern matcher and teaching the graph builder to create inter-group edges.
+2. Added unit tests covering multi-group sequential scenarios in both `pattern-matcher` and `graph-builder` suites.
+3. Addressed Biome lint warnings introduced by the change (regex constants moved to module scope, block statements enforced).
 
 ### 2025-09-15 (Session 4)
 

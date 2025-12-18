@@ -128,6 +128,76 @@ describe("GraphBuilder", () => {
       const ids = graph.map((n) => n.id);
       expect(new Set(ids).size).toBe(ids.length);
     });
+
+    it("handles sequential groups with -> operator", () => {
+      const scriptsForSeq: Script[] = [
+        { command: "echo a", name: "a" },
+        { command: "echo b", name: "b" },
+        { command: "echo c", name: "c" },
+        { command: "echo d", name: "d" },
+      ];
+
+      const graph = builder.buildGraph(
+        ["SEQ0:a", "SEQ0:b", "SEQ1:c", "SEQ1:d"],
+        scriptsForSeq,
+        {}
+      );
+
+      const nodeA = graph.find((n) => n.tasks[0]?.name === "a");
+      const nodeB = graph.find((n) => n.tasks[0]?.name === "b");
+      const nodeC = graph.find((n) => n.tasks[0]?.name === "c");
+      const nodeD = graph.find((n) => n.tasks[0]?.name === "d");
+
+      expect(nodeA).toBeDefined();
+      expect(nodeB).toBeDefined();
+      expect(nodeC).toBeDefined();
+      expect(nodeD).toBeDefined();
+
+      // Should expect Group 1 (a, b) to have no dependencies
+      expect(nodeA?.dependencies).toHaveLength(0);
+      expect(nodeB?.dependencies).toHaveLength(0);
+
+      // Should expect Group 2 (c, d) to depend on both a and b
+      expect(nodeC?.dependencies).toHaveLength(2);
+      expect(nodeD?.dependencies).toHaveLength(2);
+
+      // Should expect c to depend on both a and b's node IDs
+      const nodeAId = nodeA?.id;
+      const nodeBId = nodeB?.id;
+      expect(nodeC?.dependencies).toContain(nodeAId);
+      expect(nodeC?.dependencies).toContain(nodeBId);
+      expect(nodeD?.dependencies).toContain(nodeAId);
+      expect(nodeD?.dependencies).toContain(nodeBId);
+    });
+
+    it("handles three sequential groups", () => {
+      const scriptsForSeq: Script[] = [
+        { command: "echo a", name: "a" },
+        { command: "echo b", name: "b" },
+        { command: "echo c", name: "c" },
+      ];
+
+      const graph = builder.buildGraph(
+        ["SEQ0:a", "SEQ1:b", "SEQ2:c"],
+        scriptsForSeq,
+        {}
+      );
+
+      const nodeA = graph.find((n) => n.tasks[0]?.name === "a");
+      const nodeB = graph.find((n) => n.tasks[0]?.name === "b");
+      const nodeC = graph.find((n) => n.tasks[0]?.name === "c");
+
+      // Should expect a to have no dependencies
+      expect(nodeA?.dependencies).toHaveLength(0);
+
+      // Should expect b to depend on a
+      expect(nodeB?.dependencies).toHaveLength(1);
+      expect(nodeB?.dependencies).toContain(nodeA?.id);
+
+      // Should expect c to depend on b
+      expect(nodeC?.dependencies).toHaveLength(1);
+      expect(nodeC?.dependencies).toContain(nodeB?.id);
+    });
   });
 
   describe("validateGraph", () => {

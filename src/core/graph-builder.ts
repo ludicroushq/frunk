@@ -14,6 +14,8 @@ const STANDARD_FRUNK_PATTERN =
   /^(?:f|frunk)\s+(\[.+?\])(?:\s+.*?)?\s*(?:--\s+(.+))?$/;
 const PATH_BASED_PATTERN =
   /(?:cli\.js|node\s+.*\/cli\.js)\s+(\[.+?\])(?:\s+.*?)?\s*(?:--\s+(.+))?$/;
+const SEQ_MARKER_REGEX = /^SEQ\d*:/;
+const SEQ_INDEX_CAPTURE = /^SEQ(\d+):(.+)$/;
 
 type TaskNode = {
   task: Task;
@@ -41,6 +43,12 @@ export class GraphBuilder {
     log("=== Starting graph build ===");
     log("Input patterns:", patterns);
     log("Available scripts:", Array.from(scriptMap.keys()));
+
+    // Parse sequential groups from patterns
+    // Patterns come in as: ["SEQ:a", "SEQ:b", "SEQ:c", "SEQ:d"] for [a,b]->[c,d]
+    // We need to identify the group boundaries based on the original pattern structure
+    const sequentialGroups = this.parseSequentialGroups(patterns);
+    log("Sequential groups:", sequentialGroups);
 
     // Helper to recursively process a script and its dependencies
     const processScript = (
@@ -145,10 +153,35 @@ export class GraphBuilder {
       }
     };
 
-    // Process all requested patterns (strip any sequential markers for now)
-    const resolvedScriptNames = patterns.map((p) => p.replace("SEQ:", ""));
+    // Process all requested patterns (strip any sequential markers like SEQ0:, SEQ1:, etc.)
+    const resolvedScriptNames = patterns.map((p) =>
+      p.replace(SEQ_MARKER_REGEX, "")
+    );
     for (const scriptName of resolvedScriptNames) {
       processScript(scriptName);
+    }
+
+    // Add edges between sequential groups
+    // Each script in group N+1 should depend on ALL scripts in group N
+    for (let i = 1; i < sequentialGroups.length; i++) {
+      const prevGroup = sequentialGroups[i - 1];
+      const currentGroup = sequentialGroups[i];
+
+      if (!(prevGroup && currentGroup)) {
+        continue;
+      }
+
+      for (const currentScript of currentGroup) {
+        for (const prevScript of prevGroup) {
+          // Only add edge if both nodes exist in the graph
+          if (graph.hasNode(currentScript) && graph.hasNode(prevScript)) {
+            log(
+              `Adding sequential edge from ${currentScript} to ${prevScript}`
+            );
+            graph.setEdge(currentScript, prevScript);
+          }
+        }
+      }
     }
 
     // If we have a direct command after --, add it as a node that depends
@@ -326,6 +359,62 @@ export class GraphBuilder {
       dependencies: patterns,
       ...(finalCommand && { finalCommand: finalCommand.trim() }),
     };
+  }
+
+  /**
+   * Parse sequential groups from patterns
+   * Input patterns like ["SEQ0:a", "SEQ0:b", "SEQ1:c", "SEQ1:d"] from [a,b]->[c,d]
+   * The numeric index indicates which sequential group each pattern belongs to.
+   */
+  private parseSequentialGroups(patterns: string[]): string[][] {
+    if (patterns.length === 0) {
+      return [];
+    }
+
+    // Check if we have any sequential markers (SEQ0:, SEQ1:, etc.)
+    const hasSequential = patterns.some((p) => SEQ_INDEX_CAPTURE.test(p));
+    if (!hasSequential) {
+      // All parallel, single group
+      return [patterns];
+    }
+
+    // Group patterns by their SEQ index
+    const groupMap = new Map<number, string[]>();
+    const nonSeqPatterns: string[] = [];
+
+    for (const pattern of patterns) {
+      const match = pattern.match(SEQ_INDEX_CAPTURE);
+      if (match?.[1] && match[2]) {
+        const groupIndex = Number.parseInt(match[1], 10);
+        const scriptName = match[2];
+
+        if (!groupMap.has(groupIndex)) {
+          groupMap.set(groupIndex, []);
+        }
+        groupMap.get(groupIndex)?.push(scriptName);
+      } else {
+        // Non-sequential pattern
+        nonSeqPatterns.push(pattern);
+      }
+    }
+
+    // Convert map to sorted array of groups
+    const sortedIndices = Array.from(groupMap.keys()).sort((a, b) => a - b);
+    const groups: string[][] = [];
+
+    for (const index of sortedIndices) {
+      const group = groupMap.get(index);
+      if (group && group.length > 0) {
+        groups.push(group);
+      }
+    }
+
+    // Add non-sequential patterns as a final group if any
+    if (nonSeqPatterns.length > 0) {
+      groups.push(nonSeqPatterns);
+    }
+
+    return groups;
   }
 
   /**

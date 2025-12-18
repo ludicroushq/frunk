@@ -64,13 +64,25 @@ describe("PatternMatcher", () => {
 
     it("handles sequential markers", () => {
       const result = matcher.resolvePatterns(["SEQ:test:*"], scripts);
-      expect(result).toContain("SEQ:test:unit");
-      expect(result).toContain("SEQ:test:e2e");
+      expect(result).toContain("SEQ0:test:unit");
+      expect(result).toContain("SEQ0:test:e2e");
     });
 
     it("handles nested groups in sequential", () => {
       const result = matcher.resolvePatterns(["SEQ:[lint,format]"], scripts);
-      expect(result).toEqual(["SEQ:lint", "SEQ:format"]);
+      expect(result).toEqual(["SEQ0:lint", "SEQ0:format"]);
+    });
+
+    it("handles multiple sequential groups", () => {
+      const result = matcher.resolvePatterns(
+        ["SEQ:[lint,format]", "SEQ:[test:unit]"],
+        scripts
+      );
+
+      // Sequential group 0 should contain the first pattern
+      expect(result).toContain("SEQ0:lint");
+      expect(result).toContain("SEQ0:format");
+      expect(result).toContain("SEQ1:test:unit");
     });
 
     it("throws on non-existent literal", () => {

@@ -1,6 +1,11 @@
 import micromatch from "micromatch";
 import type { Script } from "../types";
 
+const SEQ_PREFIX = "SEQ:";
+const INDEXED_SEQ_REGEX = /^SEQ(\d+):(.+)$/;
+const ANY_INDEXED_SEQ_REGEX = /^SEQ\d+:/;
+const INDEXED_SEQ_GROUP_REGEX = /^SEQ(\d+):/;
+
 export class PatternMatcher {
   /**
    * Resolves patterns to actual script names
@@ -33,7 +38,8 @@ export class PatternMatcher {
       return this.processExclusion(pattern.slice(1), currentResult);
     }
 
-    if (pattern.startsWith("SEQ:")) {
+    // Match SEQ:d pattern
+    if (pattern.startsWith(SEQ_PREFIX) || ANY_INDEXED_SEQ_REGEX.test(pattern)) {
       return this.processSequential(
         pattern,
         currentResult,
@@ -60,17 +66,42 @@ export class PatternMatcher {
     scriptNames: string[],
     availableScripts: Script[]
   ): string[] {
-    const SEQ_PREFIX_LENGTH = "SEQ:".length;
-    const actualPattern = pattern.slice(SEQ_PREFIX_LENGTH);
+    // Extract the actual pattern and determine group index
+    // Patterns can be: "SEQ:pattern", "SEQ:[a,b]", "SEQ0:pattern", etc.
+    let actualPattern: string;
+    let groupIndex: number;
+
+    const indexedMatch = pattern.match(INDEXED_SEQ_REGEX);
+    if (indexedMatch?.[1] && indexedMatch[2]) {
+      // Already indexed (e.g., SEQ0:pattern)
+      groupIndex = Number.parseInt(indexedMatch[1], 10);
+      actualPattern = indexedMatch[2];
+    } else {
+      // Simple SEQ: prefix - determine group index from existing patterns
+      actualPattern = pattern.slice(SEQ_PREFIX.length);
+
+      // Count existing SEQ groups to determine the current group index
+      const existingGroups = new Set<number>();
+      for (const r of currentResult) {
+        const match = r.match(INDEXED_SEQ_GROUP_REGEX);
+        if (match?.[1]) {
+          existingGroups.add(Number.parseInt(match[1], 10));
+        }
+      }
+      groupIndex = existingGroups.size;
+    }
 
     if (actualPattern.startsWith("[") && actualPattern.endsWith("]")) {
       const nestedPatterns = this.parseNestedGroup(actualPattern);
       const resolved = this.resolvePatterns(nestedPatterns, availableScripts);
-      return [...currentResult, ...resolved.map((r) => `SEQ:${r}`)];
+      return [
+        ...currentResult,
+        ...resolved.map((r) => `SEQ${groupIndex}:${r}`),
+      ];
     }
 
     const matches = micromatch(scriptNames, actualPattern);
-    return [...currentResult, ...matches.map((m) => `SEQ:${m}`)];
+    return [...currentResult, ...matches.map((m) => `SEQ${groupIndex}:${m}`)];
   }
 
   private findMatches(pattern: string, scriptNames: string[]): string[] {
@@ -125,7 +156,10 @@ export class PatternMatcher {
         continue;
       }
 
-      if (pattern.startsWith("SEQ:")) {
+      if (
+        pattern.startsWith(SEQ_PREFIX) ||
+        ANY_INDEXED_SEQ_REGEX.test(pattern)
+      ) {
         // Sequential patterns handled separately
         continue;
       }
